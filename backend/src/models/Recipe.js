@@ -31,7 +31,10 @@ const Recipe = sequelize.define("Recipe", {
     type: DataTypes.TEXT,
   },
   nutrients: {
-    type: DataTypes.JSONB, // stores as JSON in Postgres
+    type: DataTypes.JSONB, // keep all nutrients except calories
+  },
+  calories: {
+    type: DataTypes.INTEGER, // new separate column for easy filtering
   },
   serves: {
     type: DataTypes.STRING,

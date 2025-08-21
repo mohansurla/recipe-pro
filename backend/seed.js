@@ -24,16 +24,19 @@ const seedRecipes = async () => {
 
     // Map JSON to DB format
     const recipesArray = recipesJson.map((recipe) => ({
-      cuisine: recipe.cuisine || null,
-      title: recipe.title || null,
-      rating: isNaN(recipe.rating) ? null : recipe.rating,
-      prep_time: isNaN(recipe.prep_time) ? null : recipe.prep_time,
-      cook_time: isNaN(recipe.cook_time) ? null : recipe.cook_time,
-      total_time: isNaN(recipe.total_time) ? null : recipe.total_time,
-      description: recipe.description || null,
-      nutrients: recipe.nutrients || {},
-      serves: recipe.serves || null,
-    }));
+        cuisine: recipe.cuisine || null,
+        title: recipe.title || null,
+        rating: isNaN(recipe.rating) ? null : recipe.rating,
+        prep_time: isNaN(recipe.prep_time) ? null : recipe.prep_time,
+        cook_time: isNaN(recipe.cook_time) ? null : recipe.cook_time,
+        total_time: isNaN(recipe.total_time) ? null : recipe.total_time,
+        description: recipe.description || null,
+        nutrients: { ...recipe.nutrients }, // keep JSON for other nutrients
+        calories: recipe.nutrients.calories
+            ? parseInt(recipe.nutrients.calories)  // convert "389 kcal" -> 389
+            : null,
+        serves: recipe.serves || null,
+     }));
 
     // Bulk insert
     await Recipe.bulkCreate(recipesArray, { ignoreDuplicates: true });
